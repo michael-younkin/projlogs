@@ -1,0 +1,11 @@
+{
+  "name": "projlogs",
+  "version": "0.1.0",
+  "description": "Prolog in JavaScript.",
+  "main": "main.js",
+  "author": "Michael Younkin",
+  "license": "MIT",
+  "devDependencies": {
+    "jasmine-node": "^1.14.5"
+  }
+}
