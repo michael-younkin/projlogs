@@ -58,7 +58,6 @@ function parse(tokens) {
 }
 
 function parseRoot(ctx) {
-    console.log('parse root');
     let predicates = [];
     while (ctx.hasNext) {
         predicates.push(parsePredicate(ctx));
@@ -67,7 +66,6 @@ function parseRoot(ctx) {
 }
 
 function parsePredicate(ctx) {
-    console.log('parse predicate');
     let name = ctx.match('atom');
     ctx.match('lparen');
     let isRule = false;
