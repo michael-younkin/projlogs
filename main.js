@@ -1,27 +1,43 @@
 "use strict";
 
+const TOKEN_SPEC = [
+    ["lparen", "\\("],
+    ["rparen", "\\)"],
+    ["period", "\\."],
+    ["comma", ","],
+    ["atom", "[a-z]\\w*"],
+    ["variable", "[A-Z]\\w*"],
+    ["number", "\\d+"],
+    ["space", "[ \t\n]+"]
+// Compile them to regular expressions (once)
+].map((spec) => {
+    // TODO use destructuring when supported in Node
+    let type = spec[0];
+    let regex = spec[1];
+    regex = `^${regex}`;
+    return [type, new RegExp(regex)];
+});
+exports.spec = TOKEN_SPEC;
+
 function lex(s) {
     let out = [];
-    for (let c of s) {
-        if (c === " " || c === "\t" || c === "\n") {
-            continue;
-        } else if (c === "(") {
-            out.push(new Token("lparen"));
-        } else if (c === ")") {
-            out.push(new Token("rparen"));
-        } else if (c === ".") {
-            out.push(new Token("period"));
-        } else if (c === ",") {
-            out.push(new Token("comma"));
-        } else if (c === c.toLowerCase()) {
-            out.push(new Token("atom", c));
-        } else if (c === c.toUpperCase()) {
-            out.push(new Token("variable", c));
-        } else {
-            throw new Error("Unexpected character encountered.");
+    match_token: while (s.length > 0) {
+        for (let spec of TOKEN_SPEC) {
+            // TODO use destructuring when supported in Node
+            let type = spec[0];
+            let regex = spec[1];
+            let r = regex.exec(s);
+            if (r) {
+                out.push(new Token(type, r[0]));
+                s = s.substring(r[0].length);
+                continue match_token;
+            }
         }
+        throw new Error(`Unexpected character "${s.charAt(0)}" encountered.`);
     }
-    return out;
+    return out.filter((token) => {
+        return token.type !== 'space';
+    });
 }
 
 class Token {

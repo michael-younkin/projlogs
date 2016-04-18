@@ -16,31 +16,31 @@ describe("lexer", () => {
     it("should identify left and right parentheses", () => {
         let r = main.lex("()");
         expect(r).toEqual([
-            new main.Token("lparen"),
-            new main.Token("rparen")
+            new main.Token("lparen", "("),
+            new main.Token("rparen", ")")
         ]);
     });
 
     it("should identify commas", () => {
         let r = main.lex(",");
-        expect(r).toEqual([new main.Token("comma")]);
+        expect(r).toEqual([new main.Token("comma", ",")]);
     });
 
     it("should identify periods", () => {
         let r = main.lex(".");
-        expect(r).toEqual([new main.Token("period")]);
+        expect(r).toEqual([new main.Token("period", ".")]);
     });
 
     it("should handle combinations of the different tokens", () => {
         let r = main.lex("a(B,C).");
         expect(r).toEqual([
             new main.Token("atom", "a"),
-            new main.Token("lparen"),
+            new main.Token("lparen", "("),
             new main.Token("variable", "B"),
-            new main.Token("comma"),
+            new main.Token("comma", ","),
             new main.Token("variable", "C"),
-            new main.Token("rparen"),
-            new main.Token("period")
+            new main.Token("rparen", ")"),
+            new main.Token("period", ".")
         ]);
     });
 
